@@ -1,3 +1,4 @@
 wandb/
 stl10_binary/
 stl10_binary.tar.gz
+data/MNIST/
