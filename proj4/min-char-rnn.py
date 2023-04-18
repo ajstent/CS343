@@ -17,7 +17,7 @@ import re
 
 # data I/O
 #data = open('input.txt', 'r').read() # should be simple plain text file
-data = pd.read_csv('dataset/test_dataset.csv', delimiter=',', encoding="ascii", encoding_errors='ignore')
+data = pd.read_csv('test_dataset.csv', delimiter=',', encoding="ascii", encoding_errors='ignore')
 data = '\n'.join(re.sub(r'\[|\]|\",?', '', x) for x in data['directions'])
 
 # use set() to count the vacab size
@@ -30,8 +30,8 @@ char_to_ix = { ch:i for i,ch in enumerate(chars) }
 ix_to_char = { i:ch for i,ch in enumerate(chars) }
 
 # hyperparameters
-hidden_size = 100 # size of hidden layer of neurons
-seq_length = 25 # number of steps to unroll the RNN for
+hidden_size = 200 # size of hidden layer of neurons
+seq_length = 40 # number of steps to unroll the RNN for
 learning_rate = 1e-1
 
 # model parameters
