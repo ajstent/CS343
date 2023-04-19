@@ -80,6 +80,7 @@ def lossFun(inputs, targets, hprev):
     ps[t] = np.exp(ys[t]) / np.sum(np.exp(ys[t]))
     ## softmax (cross-entropy loss)
     loss += -np.log(ps[t][targets[t], 0])
+    print(loss)
 
   # backward pass: compute gradients going backwards
   dWxh, dWhh, dWhy = np.zeros_like(Wxh), np.zeros_like(Whh), np.zeros_like(Why)

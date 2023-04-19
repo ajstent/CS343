@@ -5,35 +5,30 @@ CS343: Neural Networks
 Project 4: Recurrent Neural Networks
 '''
 import numpy as np
-import pandas as pd
-import re
 
-np.random.seed(0)
-
-
-def load_recipes(path):
-    '''Load and the recipes dataset from https://recipenlg.cs.put.poznan.pl/. For each recipe, keep only the directions.
+def load_data(path):
+    '''Load the dataset at path (which should be in plain text format)
     
     Parameters:
     ----------
-    path: the path to the file containing the dataset
+    path: the path to the file containing a dataset in plain text format, one text per line
 
     Returns:
     char_to_ix: dictionary. Map characters to int indices.
     ix_to_char: dictionary. Map int indices to characters.
-    data: string corresponding to the directions from all the recipes. Separate the recipes with '#'. 
+    data: string corresponding to all the data, with newlines separating texts. 
     
     TODO:
-    1) Read the recipes in (use the python csv or pandas package to read the CSV)
-    2) Keep the directions field for each recipe; convert this field from a list of strings to a single string
-    3) Concatenate all the separate directions into a single big text
+    1) Read the text in 
+    2) Convert the list of lines (if you have one) to a single ascii-encoded lower-case lower-case string
     4) Tokenize - we use character-level tokenization
     5) Calculate the vocabulary (sort the vocabulary alphabetically!)
 
-    Do NOT lowercase, filter stop words, or any other preprocessing for the basic project.
+    Do NOT filter stop words or do any other preprocessing for the basic project.
     '''
-    data = pd.read_csv(path, delimiter=',', encoding="ascii", encoding_errors='ignore')
-    data = '#\n'.join(re.sub(r'\[|\]|\",?', '', x) for x in data['directions'])
+    with open(path) as f:
+        lines = f.readlines()
+    data = ''.join(lines)
     data = data.lower()
     chars = sorted(list(set(data)))
     data_size, vocab_size = len(data), len(chars)
@@ -43,6 +38,7 @@ def load_recipes(path):
     char_to_ix = { ch:i for i,ch in enumerate(chars) }
     ix_to_char = { i:ch for i,ch in enumerate(chars) }
     return char_to_ix, ix_to_char, data
+    #pass
 
 def sample_sequence(data, char_to_ix, length, start=-1):
     '''Sample a sequence from the data.
@@ -55,15 +51,13 @@ def sample_sequence(data, char_to_ix, length, start=-1):
     start: int. Where to start the sequence.
 
     Returns:
-    xs: ndarray of type int and max length length. Int encoding of character sequence from a randomly chosen starting point in data.
-    ys: ndarray of type int and max length length. Int encoding of off-by-one character sequence from xs.
+    xs: ndarray of type int and max length length. Int encoding of character sequence from a either start or a randomly chosen starting point in data.
 
-    For example, if the the starting point is the first character in the third recipe and the length is 10, then:
+    For example, if the the starting point is the first character in the third recipe in the recipe data and the length is 10, then:
     * xs will be an int sequence corresponding to 'n a heavy '
-    * ys will be an int sequence corresponding to ' a heavy 2'
     '''
     if start < 0:
+        # pick a random starting point fully within the data
         start = np.random.randint(0, len(data)-length)
-    print(start)
-    print(data[0:100])
-    return [char_to_ix[x] for x in data[start:start+length]]
+    return np.array([char_to_ix[x] for x in data[start:start+length]])
+    #pass
